@@ -66,6 +66,7 @@ class User(AbstractBaseUser):
     qiziqishi = models.TextField(blank=True, null=True)
     reg_time = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(unique=True)
+    certificate = models.FileField(upload_to='sertificates/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     is_active = models.BooleanField(default=True)
@@ -73,7 +74,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['ism', 'familya', 'telefon_raqam', 'hozirgi_kasbi', 'qiziqishi', 'email', 'reg_time']
+    REQUIRED_FIELDS = ['ism', 'familya', 'telefon_raqam', 'hozirgi_kasbi', 'qiziqishi', 'email', 'reg_time', "certificate"]
 
     objects = CustomUserManager()
 

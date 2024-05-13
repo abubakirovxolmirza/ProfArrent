@@ -6,4 +6,6 @@ from users.models import User
 class AI(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     result = models.TextField()
-    gpt_result = models.TextField(blank=True, null=True)
+    first = models.TextField(blank=True, null=True)
+    second = models.TextField(blank=True, null=True)
+    third = models.TextField(blank=True, null=True) 

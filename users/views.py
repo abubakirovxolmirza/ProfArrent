@@ -2,14 +2,20 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, Admin, Moderator
-from .serializers import UserSerializer, AdminSerializer, ModeratorSerializer, UserLoginSerializer
+from .serializers import UserSerializer, AdminSerializer, ModeratorSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from datetime import timedelta
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from django.contrib.auth import authenticate, login
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 
 def get_tokens_for_user(user1):
     refresh = RefreshToken.for_user(user1)
@@ -20,8 +26,8 @@ def get_tokens_for_user(user1):
         'id': user1.get_id()
     }
 
-api_settings.ACCESS_TOKEN_LIFETIME = timedelta(days=7)
-api_settings.REFRESH_TOKEN_LIFETIME = timedelta(days=7)
+api_settings.ACCESS_TOKEN_LIFETIME = timedelta(days=1)
+api_settings.REFRESH_TOKEN_LIFETIME = timedelta(days=1)
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -102,13 +108,22 @@ class CreateModeratorView(generics.CreateAPIView):
         return Response(tokens)
 
 
-# views.py
-from rest_framework import generics
-from .serializers import UserLoginSerializer
-
 class LoginView(generics.CreateAPIView):
-    serializer_class = UserLoginSerializer
+    permission_classes = [permissions.AllowAny]
+    serializer_class = LoginSerializer
 
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
 
+        # Check if the email and password are valid for any user type
+        user = User.objects.filter(email=email).first() or \
+               Admin.objects.filter(email=email).first() or \
+               Moderator.objects.filter(email=email).first()
 
+        if user and user.check_password(password):
+            tokens = get_tokens_for_user(user)
+            return Response(tokens)
 
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        

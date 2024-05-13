@@ -4,7 +4,7 @@ from .models import User, Admin, Moderator
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'telefon_raqam', 'created_at', 'ism', 'familya', 'telefon_raqam', 'hozirgi_kasbi', 'qiziqishi', 'reg_time')
+        fields = ('id', 'email', 'password', 'telefon_raqam', 'created_at', 'ism', 'familya', 'telefon_raqam', 'hozirgi_kasbi', 'qiziqishi', 'reg_time', 'certificate')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -34,36 +34,20 @@ class ModeratorSerializer(serializers.ModelSerializer):
         return moderator
 
 
-# serializers.py
-from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
-User = get_user_model()
-Admin = get_user_model()  # Assuming you have a similar model for Admin
-Moderator = get_user_model()  # Assuming you have a similar model for Moderator
-
-class UserLoginSerializer(serializers.Serializer):
+class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-    tokens = serializers.SerializerMethodField()
+    password = serializers.CharField()
 
-    def get_tokens(self, obj):
-        user = User.objects.filter(email=obj['email']).first() or \
-               Admin.objects.filter(email=obj['email']).first() or \
-               Moderator.objects.filter(email=obj['email']).first()
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")
+    
+        
 
-        refresh = RefreshToken.for_user(user)
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }
-
-    def validate(self, attrs):
-        user = authenticate(email=attrs['email'], password=attrs['password'])
-        if not user:
-            raise serializers.ValidationError('Incorrect email or password')
-        if not user.is_active:
-            raise serializers.ValidationError('User is deactivated')
-        return attrs
 

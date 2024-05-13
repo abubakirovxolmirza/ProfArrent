@@ -4,4 +4,4 @@ from .models import AI
 class AISerializer(serializers.ModelSerializer):
     class Meta:
         model = AI
-        fields = ('id', 'user_id', 'result', 'gpt_result')
+        fields = ('id', 'user_id', 'result', 'first', 'second', 'third')
