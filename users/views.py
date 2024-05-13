@@ -16,18 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-
-def get_tokens_for_user(user1):
-    refresh = RefreshToken.for_user(user1)
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-        'role': user1.get_role(),
-        'id': user1.get_id()
-    }
-
-api_settings.ACCESS_TOKEN_LIFETIME = timedelta(days=1)
-api_settings.REFRESH_TOKEN_LIFETIME = timedelta(days=1)
+from .tokens import get_tokens_for_user
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -106,24 +95,35 @@ class CreateModeratorView(generics.CreateAPIView):
         tokens = get_tokens_for_user(user1)
 
         return Response(tokens)
+    
+from rest_framework.request import Request
 
+class LoginView(APIView):
+    permission_classes = []
 
-class LoginView(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny]
-    serializer_class = LoginSerializer
+    def post(self, request: Request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        role = request.data.get("role")
 
-    def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        # Check if the email and password are valid for any user type
-        user = User.objects.filter(email=email).first() or \
-               Admin.objects.filter(email=email).first() or \
-               Moderator.objects.filter(email=email).first()
-
-        if user and user.check_password(password):
+        if role == "user":
+            user = User.objects.get(email=email)
+            user.check_password(password)
             tokens = get_tokens_for_user(user)
             return Response(tokens)
 
-        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        elif role == "admin":
+            user = Admin.objects.get(email=email)
+            user.check_password(password)
+            tokens = get_tokens_for_user(user)
+            return Response(tokens)
+        elif role == "moderator":
+            user = Moderator.objects.get(email=email)
+            user.check_password(password)
+            tokens = get_tokens_for_user(user)
+            return Response(tokens)
+        else:
+            return Response(data={"message": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
         

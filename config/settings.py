@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
+APPEND_SLASH = False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ojwi&_ut_7p%5)qs7+)uigshlosn(4wcqvq(_2ch7#j@#o@^dn'
 
@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-ojwi&_ut_7p%5)qs7+)uigshlosn(4wcqvq(_2ch7#j@#o@^dn
 # DEBUG = False
 DEBUG = True
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['64.226.109.174']
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['64.226.109.174']
 
 
 # Application definition
@@ -45,15 +45,15 @@ INSTALLED_APPS = [
     'ai.apps.AiConfig',
     'corsheaders',
     'drf_spectacular',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
 ]
 
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
     ),
 }
 

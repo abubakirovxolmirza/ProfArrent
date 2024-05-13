@@ -86,6 +86,7 @@ class User(AbstractBaseUser):
     
     def get_id(self):
         return self.id
+    
 
 
 class Admin(AbstractBaseUser):

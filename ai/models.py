@@ -9,3 +9,5 @@ class AI(models.Model):
     first = models.TextField(blank=True, null=True)
     second = models.TextField(blank=True, null=True)
     third = models.TextField(blank=True, null=True) 
+
+    
