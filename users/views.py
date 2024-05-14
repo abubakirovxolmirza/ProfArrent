@@ -28,10 +28,12 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = []
+    authentication_classes = []
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -57,7 +59,9 @@ class AdminDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CreateAdminView(generics.CreateAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = []
+    authentication_classes = []
+    
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -83,7 +87,8 @@ class ModeratorDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CreateModeratorView(generics.CreateAPIView):
     queryset = Moderator.objects.all()
     serializer_class = ModeratorSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = []
+    authentication_classes = []
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -97,33 +102,58 @@ class CreateModeratorView(generics.CreateAPIView):
         return Response(tokens)
     
 from rest_framework.request import Request
-
 class LoginView(APIView):
     permission_classes = []
+    
 
     def post(self, request: Request):
         email = request.data.get("email")
         password = request.data.get("password")
-        role = request.data.get("role")
-
-        if role == "user":
+        # role = request.data.get("role")
+        
+        try:
             user = User.objects.get(email=email)
             user.check_password(password)
             tokens = get_tokens_for_user(user)
             return Response(tokens)
-
-        elif role == "admin":
-            user = Admin.objects.get(email=email)
-            user.check_password(password)
-            tokens = get_tokens_for_user(user)
-            return Response(tokens)
-        elif role == "moderator":
-            user = Moderator.objects.get(email=email)
-            user.check_password(password)
-            tokens = get_tokens_for_user(user)
-            return Response(tokens)
-        else:
-            return Response(data={"message": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except User.DoesNotExist:
+            try:
+                user = Admin.objects.get(email=email)
+                user.check_password(password)
+                tokens = get_tokens_for_user(user)
+                return Response(tokens)
+            except Admin.DoesNotExist:
+                try:
+                    user = Moderator.objects.get(email=email)
+                    user.check_password(password)
+                    tokens = get_tokens_for_user(user)
+                    return Response(tokens)
+                except Moderator.DoesNotExist:
+                    return Response(data={"message": "Bunday User yoq!"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # # if role == "user":
+        #     user = User.objects.get(email=email)
+        #     user.check_password(password)
+        #     tokens = get_tokens_for_user(user)
+        #     return Response(tokens)
+        # try:
+        #     user = Admin.objects.get(email=email)
+        #     user.check_password(password)
+        #     tokens = get_tokens_for_user(user)
+        #     return Response(tokens)
+        # elif role == "admin":
+        #     user = Admin.objects.get(email=email)
+        #     user.check_password(password)
+        #     tokens = get_tokens_for_user(user)
+        #     return Response(tokens)
+        # elif role == "moderator":
+        #     user = Moderator.objects.get(email=email)
+        #     user.check_password(password)
+        #     tokens = get_tokens_for_user(user)
+        #     return Response(tokens)
+        # else:
+        #     return Response(data={"message": "Invalid role"}, status=status.HTTP_400_BAD_REQUEST)
         
         
         

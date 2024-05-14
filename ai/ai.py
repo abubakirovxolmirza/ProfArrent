@@ -86,7 +86,7 @@ def chatbot_first(message):
                 D. Home networking setups or server administration.
              
 
-             I am sending you now the test taker's answers to these tests: {message}.First tell me what field of IT this user is interested in. By complete information, they mean: What is the field of BU itself? What are similar industries to this industry? How can you find a future job in this field? and the last question is to write down the roadmap information for the study of this field.'''},
+             I am sending you now the test taker's answers to these tests: {message}.First tell me what field of IT this user is interested in. By complete information, they mean: What is the field of BU itself? What are similar industries to this industry? How can you find a future job in this field? and the last question is to write down the roadmap information for the study of this field.Return the answer in Uzbek.'''},
         ],
         temperature=0,
     )
@@ -175,7 +175,7 @@ def chatbot_second(message):
                 D. Home networking setups or server administration.
              
 
-             I am sending you now the test taker's answers to these tests: {message}. Second, provide complete information on the field of interest for this user. By complete information, they mean: What is the field of BU itself? What are similar industries to this industry? How can you find a future job in this field? and the last question is to write down the roadmap information for the study of this field.'''},
+             I am sending you now the test taker's answers to these tests: {message}. Second, provide complete information on the field of interest for this user. By complete information, they mean: What is the field of BU itself? What are similar industries to this industry? How can you find a future job in this field? and the last question is to write down the roadmap information for the study of this field.Return the answer in Uzbek.'''},
         ],
         temperature=0,
     )

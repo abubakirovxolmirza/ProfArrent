@@ -25,9 +25,12 @@ urlpatterns = [
     path('api/', include('quiz.urls')),
     path('api/', include('users.urls')),
     path('api/', include('ai.urls')),
+    path('api/', include('certificate.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

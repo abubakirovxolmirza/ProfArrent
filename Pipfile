@@ -12,6 +12,9 @@ django-cors-headers = "*"
 django-rest-swagger = "*"
 drf-spectacular = "*"
 whitenoise = "*"
+pdfkit = "*"
+xhtml2pdf = "*"
+pyhtml2pdf = "*"
 
 [dev-packages]
 
