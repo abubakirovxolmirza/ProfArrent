@@ -1,23 +1,38 @@
-# views.py
 import os
-from django.http import HttpResponse
+import json
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.template.loader import get_template
 from django.conf import settings
 from pyhtml2pdf import converter
 from django.template import TemplateDoesNotExist
-    
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
 def generate_pdf(request):
-    html_template_path = os.path.join(settings.BASE_DIR, 'certificate/templates/certificate', 'pdf_template.html')
+     if request.method == 'POST':
+         data = json.loads(request.body)
+         firstname = data.get('firstname')
+         lastname = data.get('lastname')
+         name = data.get('name')
 
-    template = get_template(html_template_path)
-    html_content = template.render()
+         html_template_path = os.path.join(settings.BASE_DIR, 'certificate/templates/certificate', 'pdf_template.html')
 
-    pdf_output_path = os.path.join(settings.BASE_DIR, 'media')
+         try:
+             template = get_template(html_template_path)
+             html_content = template.render(request, 'certificate/pdf_template.html', {'firstname': firstname, 'lastname': lastname, 'name': name})
+         except TemplateDoesNotExist:
+             return JsonResponse({'error': 'Template does not exist.'}, status=400)
 
-    converter.convert(f'file:///{html_template_path}', pdf_output_path)
+         pdf_output_path = os.path.join(settings.BASE_DIR, 'media/certificate', f'{firstname}.pdf')
 
-    with open(pdf_output_path, 'rb') as pdf_file:
-        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="sample2.pdf"'
-    
-    return response
+         converter.convert(f'file:///{html_template_path}', f'{firstname}.pdf')
+
+         with open(pdf_output_path, 'rb') as pdf_file:
+             response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+             response['Content-Disposition'] = f'inline; filename="{firstname}.pdf"'
+
+         return render(request, 'certificate/pdf_template.html', {'firstname': firstname, 'lastname': lastname, 'name': name})
+     else:
+         return JsonResponse({'error': 'Invalid HTTP method.'}, status=400)
