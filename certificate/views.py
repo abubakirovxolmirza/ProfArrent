@@ -21,7 +21,7 @@ def generate_pdf(request):
 
          try:
              template = get_template(html_template_path)
-             html_content = template.render(request, 'certificate/pdf_template.html', {'firstname': firstname, 'lastname': lastname, 'name': name})
+             html_content = template.render({'firstname': firstname, 'lastname': lastname, 'name': name})
          except TemplateDoesNotExist:
              return JsonResponse({'error': 'Template does not exist.'}, status=400)
 
@@ -29,10 +29,8 @@ def generate_pdf(request):
 
          converter.convert(f'file:///{html_template_path}', f'{firstname}.pdf')
 
-         with open(pdf_output_path, 'rb') as pdf_file:
-             response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-             response['Content-Disposition'] = f'inline; filename="{firstname}.pdf"'
+        #  with open(pdf_output_path, 'rb') as pdf_file:
+        #      response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        #      response['Content-Disposition'] = f'inline; filename="{firstname}.pdf"'
 
-         return render(request, 'certificate/pdf_template.html', {'firstname': firstname, 'lastname': lastname, 'name': name})
-     else:
-         return JsonResponse({'error': 'Invalid HTTP method.'}, status=400)
+         return JsonResponse({'message': 'Certificate generated successfully.'}, status=200)
