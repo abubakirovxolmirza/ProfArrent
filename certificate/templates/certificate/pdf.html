@@ -1,3 +1,6 @@
+{% extends 'easy_pdf/base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -128,7 +131,7 @@
           Karyera.uz
         </p>
       </div>
-      <img class="img-back" src="./Cert Template 25.svg" alt="" />
+      <img class="img-back" src="../../../staticfiles/Cert Template 25.svg" alt="" />
       <div class="certificate1">
         <section>
           <div class="div">
@@ -162,7 +165,7 @@
             <div style="font-size: 16px" class="div-3">
               Ushbu sertifikat taqdim etiladi
             </div>
-            <div class="div-4">{{ firstname }}</div>
+            <div class="div-4">{{user.ism}} {{user.familya}}</div>
             <div style="font-size: 14px" class="div-5">
               IT karyera testini muvofaqqiyatli tugatgani uchun
             </div>
@@ -185,17 +188,17 @@
                   alt=""
                 />
               </div>
-              <img class="line-1" src="./Line 1.svg" alt="" />
+              <img class="line-1" src="../../../staticfiles/Line 1.svg" alt="" />
               <p>IMZO</p>
             </div>
             <div>
-              <img style="width: 80px" src="./Group 28.svg" alt="" />
+              <img style="width: 80px" src="../../../staticfiles/Group 28.svg" alt="" />
             </div>
             <div class="lines">
               <div style="width: 100px; height: 50px">
                 <p style="font-size: 18px; font-weight: 600;text-align: center;" id="date"></p>
               </div>
-              <img class="line-1" src="Line 1.svg" alt="" />
+              <img class="line-1" src="../../../staticfiles/Line 1.svg" alt="" />
               <p>SANA</p>
             </div>
           </div>
@@ -212,3 +215,4 @@
     </script>
   </body>
 </html>
+{% endblock content %}

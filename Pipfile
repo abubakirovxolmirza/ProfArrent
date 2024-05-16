@@ -51,6 +51,8 @@ typing-extensions = "==4.11.0"
 tzdata = "==2024.1"
 uritemplate = "==4.1.1"
 urllib3 = "==2.2.1"
+django-easy-pdf3 = "*"
+urlquote = "*"
 
 [dev-packages]
 

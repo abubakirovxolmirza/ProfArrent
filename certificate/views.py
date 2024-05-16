@@ -1,33 +1,50 @@
-import os
-import json
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.template.loader import get_template
-from django.conf import settings
-from pyhtml2pdf import converter
-from django.template import TemplateDoesNotExist
-from django.views.decorators.csrf import csrf_exempt
+# import os
+# import json
+# from django.http import HttpResponse, JsonResponse
+# from django.shortcuts import render
+# from django.template.loader import get_template
+# from django.conf import settings
+# from pyhtml2pdf import converter
+# from django.template import TemplateDoesNotExist
+# from django.views.decorators.csrf import csrf_exempt
+# from users.models import User
+# from django.shortcuts import render
+
+# @csrf_exempt
+# def generate_pdf(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         user_id = data.get('user_id')
+#         user = User.objects.filter(id=user_id).first()
+#         user_name = user.ism
+#         user_surname = user.familya
+        
+#         html_template_path = os.path.join(settings.BASE_DIR, 'certificate/templates/certificate', 'pdf.html')
 
 
-@csrf_exempt
-def generate_pdf(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        firstname = data.get('firstname')
-        lastname = data.get('lastname')
-        name = data.get('name')
+      
+#         template = get_template(html_template_path)
+#         html_content = template.render({'ism': user_name, 'familya': user_surname})
 
-        html_template_path = os.path.join(settings.BASE_DIR, 'certificate/templates/certificate', 'pdf_template.html')
 
-        template = get_template(html_template_path)
-        html_content = template.render({'firstname': firstname, 'lastname': lastname, 'name': name})
+#         pdf_output_path = os.path.join(settings.BASE_DIR, 'media/certificate', f'{user_name}.pdf')
+#         converter.convert(f'file:///{html_template_path}', f'file/sertificates/{user_name}.pdf')
+        
+        
+#         return render(request, 'certificate/pdf.html', {'ism': user_name, 'familya': user_surname})
+#     else:
+#         return JsonResponse({'error': 'Invalid HTTP method.'}, status=400)
 
-        pdf_output_path = os.path.join(settings.BASE_DIR, 'media/certificate', f'{firstname}.pdf')
+# def pdf(request):
+#     return render(request, 'certificate/pdf.html', {'ism': 'John', 'familya': 'Doe'})
+from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
+from users.models import User
+from django.views.generic import DetailView
 
-        converter.convert(f'file:///{html_template_path}', f'{firstname}.pdf')
 
-        # with open(pdf_output_path, 'rb') as pdf_file:
-        #     response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-        #     response['Content-Disposition'] = f'inline; filename="{firstname}.pdf"'
 
-        return JsonResponse({'message': 'Certificate created successfully.'}, status=200)
+
+class PDFUserDetailView(PDFTemplateResponseMixin, DetailView):
+    model = User
+    context_object_name = 'user'
+    template_name = 'certificate/pdf.html'

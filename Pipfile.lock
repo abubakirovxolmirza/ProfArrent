@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c2ec3f61a454bafa8c2bbb88cc57fb08f5d50cc16f02fe765b68db3a673189b6"
+            "sha256": "0b95f056de0ed3441ec6c63e1bea95bbdf2b09e5094ff8ccdc941e6ad23589be"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -130,7 +130,7 @@
                 "sha256:fa3a0128b152627161ce47201262d3140edb5a5c3da88d73a1b790a959126956",
                 "sha256:fcc8eb6d5902bb1cf6dc4f187ee3ea80a1eba0a89aba40a5cb20a5087d961357"
             ],
-            "markers": "platform_python_implementation != 'PyPy'",
+            "markers": "python_version >= '3.8'",
             "version": "==1.16.0"
         },
         "chardet": {
@@ -343,6 +343,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==4.3.1"
+        },
+        "django-easy-pdf3": {
+            "hashes": [
+                "sha256:5c406cf07abc986cedde94552a332c24b14e72693e7d1d0db5b392012aac9919",
+                "sha256:8c7ad5b8923834bff8c94ffa5a10bbaad41250eb3ccbacccd0062c64f41719dc"
+            ],
+            "index": "pypi",
+            "version": "==0.1.4"
         },
         "django-rest-swagger": {
             "hashes": [
@@ -1176,11 +1184,11 @@
         },
         "selenium": {
             "hashes": [
-                "sha256:0bd564ee166980d419a8aaf4ac00289bc152afcf2eadca5efe8c8e36711853fd",
-                "sha256:b1d0c33b38ca27d0499183e48e1dd09ff26973481f5d3ef2983073813ae6588d"
+                "sha256:4770ffe5a5264e609de7dc914be6b89987512040d5a8efb2abb181330d097993",
+                "sha256:650dbfa5159895ff00ad16e5ddb6ceecb86b90c7ed2012b3f041f64e6e4904fe"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==4.20.0"
+            "version": "==4.21.0"
         },
         "simplejson": {
             "hashes": [
@@ -1346,11 +1354,11 @@
         },
         "trio": {
             "hashes": [
-                "sha256:9b41f5993ad2c0e5f62d0acca320ec657fdb6b2a2c22b8c7aed6caf154475c4e",
-                "sha256:e6458efe29cc543e557a91e614e2b51710eba2961669329ce9c862d50c6e8e81"
+                "sha256:9f5314f014ea3af489e77b001861c535005c3858d38ec46b6b071ebfa339d7fb",
+                "sha256:e42617ba091e7b2e50c899052e83a3c403101841de925187f61e7b7eaebdf3fb"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==0.25.0"
+            "version": "==0.25.1"
         },
         "trio-websocket": {
             "hashes": [
@@ -1414,6 +1422,16 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==2.2.1"
+        },
+        "urlquote": {
+            "hashes": [
+                "sha256:09677643e9eb877bb36a70af289cbf5398993938759c98ce4e94b384f09eb565",
+                "sha256:aa8ae411b1694a05c87f013130bf8b163cfc383268700493d4c743061aca5770",
+                "sha256:d43d301aaca75f3297161ab69c4bb0ea8c583ecd5fa46c54584f42e4aa01fa70",
+                "sha256:dad03b11675859751ec802cbfaaf3ba7a4f4ce1162328df1075b30115f6a1eb6"
+            ],
+            "index": "pypi",
+            "version": "==2.1.0"
         },
         "webdriver-manager": {
             "hashes": [
