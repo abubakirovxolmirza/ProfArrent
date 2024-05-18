@@ -7,14 +7,14 @@ from django.conf import settings
 from pyhtml2pdf import converter
 from django.template import TemplateDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
-from users.models import User
+from users.models import User, CustomUser
 from django.shortcuts import render
 
 def certificate(request, pk):
     try:
-        user = User.objects.filter(id=pk).first()
-        user_name = user.ism
-        user_surname = user.familya
+        user = CustomUser.objects.filter(id=pk).first()
+        user_name = user.first_name
+        user_surname = user.last_name
         template = get_template('certificate/pdf.html')
         context = {'ism': user_name, 'familya': user_surname}
         html = template.render(context)
@@ -22,25 +22,30 @@ def certificate(request, pk):
     except User.DoesNotExist:
         return HttpResponse(status=404)
     
-# from easy_pdf.views import PDFTemplateView, PDFTemplateResponseMixin
-# from users.models import User
-# from django.views.generic import DetailView
+
 @csrf_exempt
 def pdf(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        user_id = data.get('user_id')
-        user = User.objects.filter(id=user_id).first()
-        user_name = user.ism
-        user_surname = user.familya
+        user_id = data.get("user_id")
         
-        # return converter.convert(f'http://127.0.0.1:8000/api/pdf/{user_id}', f'{user_name}{user_surname}.pdf')
-    # converter.convert(f'http://127.0.0.1:8000/api/pdf/{user_id}', f'{user_name}{user_surname}.pdf')
-    converter.convert(f'http://127.0.0.1:8000/api/pdf/{user_id}', f'{user_name}{user_surname}.pdf')
-    return JsonResponse({'message': 'Pdf is generated successfully!'})
-
-
-# class PDFUserDetailView(PDFTemplateResponseMixin, DetailView):
-#     model = User
-#     context_object_name = 'user'
-#     template_name = 'certificate/pdf.html'
+        user = CustomUser.objects.filter(id=user_id).first()
+        if not user:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        
+        user_name = user.first_name
+        user_surname = user.last_name
+        
+        pdf_url = f'http://127.0.0.1:8000/api/pdf/{user_id}'
+        pdf_filename = f'{user_name}{user_surname}.pdf'
+        pdf_filepath = os.path.join(settings.MEDIA_ROOT, 'certificate', pdf_filename)
+        
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(pdf_filepath), exist_ok=True)
+        
+        # Generate the PDF and save it to the specified path
+        converter.convert(pdf_url, pdf_filepath)
+        
+        return JsonResponse({'message': 'PDF generated successfully!', 'pdf_url': f'{settings.MEDIA_URL}certificate/{pdf_filename}'})
+    else:
+        return HttpResponse(status=405)

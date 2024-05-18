@@ -11,4 +11,3 @@ class AIListView(generics.ListCreateAPIView):
 class AIDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = AI.objects.all()
     serializer_class = AISerializer
-
