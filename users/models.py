@@ -35,22 +35,21 @@ class CustomUser(AbstractUser):
 
     objects = CustomUserManager()
 
+    def get_role(self):
+        if hasattr(self, 'admin'):
+            return 'admin'
+        elif hasattr(self, 'moderator'):
+            return 'moderator'
+        elif hasattr(self, 'user'):
+            return 'user'
+        else:
+            return 'user'
+    
     def __str__(self):
         return self.email
     
     def get_user_id(self):
         return self.id
-    
-    def get_role(self):
-        try:
-            if self.admin:
-                return self.admin.get_role()
-            if self.moderator:
-                return self.moderator.get_role()
-            if self.userprofile:
-                return self.userprofile.get_role()
-        except:
-            return 'unknown'
         
             
 class Admin(models.Model):
