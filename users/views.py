@@ -6,12 +6,22 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from .serializers import CustomUserSerializer, AdminSerializer, ModeratorSerializer, UserSerializer
 from .models import CustomUser, Admin, Moderator, User
 from rest_framework.permissions import IsAuthenticated as Isauthenticated
+from .token import get_tokens_for_user
 # Create your views here.
 
 
 class RegisterUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        tokens = get_tokens_for_user(user)
+        
+        return Response(tokens)
 
 
 class ListUsersView(generics.ListAPIView):
@@ -29,16 +39,42 @@ class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
 class AdminRegisterView(generics.CreateAPIView):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        tokens = get_tokens_for_user(user)
+        
+        return Response(tokens)
 
 
 class ModeratorRegisterView(generics.CreateAPIView):
     queryset = Moderator.objects.all()
     serializer_class = ModeratorSerializer
     
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        tokens = get_tokens_for_user(user)
+        
+        return Response(tokens)
 
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        tokens = get_tokens_for_user(user)
+        
+        return Response(tokens)
     
 
 class AdminListView(generics.ListAPIView):
@@ -75,3 +111,15 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [Isauthenticated,]
+    
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = CustomTokenObtainPairSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)

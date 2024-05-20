@@ -38,7 +38,21 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
     
+    def get_user_id(self):
+        return self.id
     
+    def get_role(self):
+        try:
+            if self.admin:
+                return self.admin.get_role()
+            if self.moderator:
+                return self.moderator.get_role()
+            if self.userprofile:
+                return self.userprofile.get_role()
+        except:
+            return 'unknown'
+        
+            
 class Admin(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     is_admin = models.BooleanField(default=True)
@@ -47,6 +61,12 @@ class Admin(models.Model):
     
     def __str__(self):
         return self.user.email
+    
+    def get_user_id(self):
+        return self.id
+    
+    def get_role(self):
+        return 'admin'
 
 class Moderator(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -56,6 +76,12 @@ class Moderator(models.Model):
     
     def __str__(self):
         return self.user.email
+    
+    def get_user_id(self):
+        return self.id
+    
+    def get_role(self):
+        return 'moderator'
     
 class User(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -68,3 +94,9 @@ class User(models.Model):
     
     def __str__(self):
         return self.user.email
+    
+    def get_user_id(self):
+        return self.id
+    
+    def get_role(self):
+        return 'user'
