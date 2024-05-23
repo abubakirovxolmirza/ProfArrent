@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-ojwi&_ut_7p%5)qs7+)uigshlosn(4wcqvq(_2ch7#j@#o@^dn
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['64.226.109.174']
-
+ALLOWED_HOSTS = ['64.226.109.174', '127.0.0.1']  
 
 # Application definition
 INSTALLED_APPS = [

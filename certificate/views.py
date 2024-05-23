@@ -37,7 +37,6 @@ def pdf(request):
         user_name = user.first_name
         user_surname = user.last_name
         
-        # pdf_url = f'http://127.0.0.1:8000/api/pdf/{user_id}'
         pdf_url = f'http://64.226.109.174:8000/api/pdf/{user_id}'
         pdf_filename = f'{user_name}{user_surname}.pdf'
         pdf_filepath = os.path.join(settings.MEDIA_ROOT, 'certificate', pdf_filename)
