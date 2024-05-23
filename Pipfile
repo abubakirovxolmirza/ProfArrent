@@ -53,6 +53,7 @@ uritemplate = "==4.1.1"
 urllib3 = "==2.2.1"
 django-easy-pdf3 = "*"
 urlquote = "*"
+htmltopdf = "*"
 
 [dev-packages]
 

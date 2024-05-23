@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
-
+        
     def get_role(self):
         if hasattr(self, 'admin'):
             return 'admin'

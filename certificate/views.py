@@ -23,6 +23,7 @@ def certificate(request, pk):
     except User.DoesNotExist:
         return HttpResponse(status=404)
     
+
 @csrf_exempt
 def pdf(request):
     if request.method == 'POST':
@@ -36,16 +37,19 @@ def pdf(request):
         user_name = user.first_name
         user_surname = user.last_name
         
-        pdf_url = f'http://127.0.0.1:8000/api/pdf/{user_id}'
+        # pdf_url = f'http://127.0.0.1:8000/api/pdf/{user_id}'
+        pdf_url = f'http://64.226.109.174:8000/api/pdf/{user_id}'
         pdf_filename = f'{user_name}{user_surname}.pdf'
         pdf_filepath = os.path.join(settings.MEDIA_ROOT, 'certificate', pdf_filename)
         
-        # Ensure the directory exists
+
         os.makedirs(os.path.dirname(pdf_filepath), exist_ok=True)
         
-        # Generate the PDF and save it to the specified path
+        # Generate pdf
         converter.convert(pdf_url, pdf_filepath)
         
         return JsonResponse({'message': 'PDF generated successfully!', 'pdf_url': f'{settings.MEDIA_URL}certificate/{pdf_filename}'})
     else:
         return HttpResponse(status=405)
+    
+    
