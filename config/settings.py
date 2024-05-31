@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-ojwi&_ut_7p%5)qs7+)uigshlosn(4wcqvq(_2ch7#j@#o@^dn
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['64.226.109.174', '127.0.0.1']  
+ALLOWED_HOSTS = ['13.49.211.106']  
 
 # Application definition
 INSTALLED_APPS = [
@@ -167,11 +167,14 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://64.226.109.174:8000",
+    "http://13.49.211.106:8000",
+    "http://prof-arent.s3-website.eu-north-1.amazonaws.com",
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_HEADERS = [
     'accept',

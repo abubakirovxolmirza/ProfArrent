@@ -84,7 +84,7 @@ class Moderator(models.Model):
     
 class User(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    jobs = models.CharField(max_length=100)
+    jobs = models.CharField(max_length=100, blank=True, null=True)
     interests = models.CharField(max_length=100)
     certificate = models.FileField(upload_to='certificates/', blank=True, null=True)
     is_admin = models.BooleanField(default=False)

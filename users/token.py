@@ -6,5 +6,5 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
         'role': user.get_role(),
-        'user_id': user.id,
+        'user_id': user.get_user_id(),
     }
