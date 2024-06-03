@@ -10,4 +10,7 @@ class AI(models.Model):
     second = models.TextField(blank=True, null=True)
     third = models.TextField(blank=True, null=True) 
 
-    
+class Text(models.Model):
+    system = models.TextField()
+    text = models.TextField()
+    text2 = models.TextField()
